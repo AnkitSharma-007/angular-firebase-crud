@@ -1,0 +1,29 @@
+<h1>Employee Data</h1>
+
+<p>This component demonstrates fetching Employee data from cloud firestore.</p>
+
+<p *ngIf="!employeeList"><em>Loading...</em></p>
+
+<table class='table table-striped' *ngIf="employeeList">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Department</th>
+            <th>City</th>
+            <th *ngIf="appUser">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let emp of employeeList">
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.gender }}</td>
+            <td>{{ emp.department }}</td>
+            <td>{{ emp.city }}</td>
+            <td *ngIf="appUser">
+                <a [routerLink]="['/employee/edit/', emp.employeeId]">Edit</a> |
+                <a [routerLink]="" (click)="delete(emp.employeeId)">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
