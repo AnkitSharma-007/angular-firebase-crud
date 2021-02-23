@@ -27,11 +27,11 @@ import { AuthGuard } from './guards/auth.guard';
     AngularFirestoreModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'add-employee', component: EmployeeformComponent, canActivate: [AuthGuard] },
-      { path: 'employee/edit/:id', component: EmployeeformComponent, canActivate: [AuthGuard] },
-      { path: '**', component: HomeComponent }
-    ]),
+    { path: '', component: HomeComponent, pathMatch: 'full' },
+    { path: 'add-employee', component: EmployeeformComponent, canActivate: [AuthGuard] },
+    { path: 'employee/edit/:id', component: EmployeeformComponent, canActivate: [AuthGuard] },
+    { path: '**', component: HomeComponent }
+], { relativeLinkResolution: 'legacy' }),
   ],
   providers: [],
   bootstrap: [AppComponent]
