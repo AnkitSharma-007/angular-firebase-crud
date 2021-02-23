@@ -1,29 +1,28 @@
-<nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" [routerLink]='["/"]'>Home</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active" *ngIf="appUser">
-                <a class="nav-link" [routerLink]='["/add-employee"]'>Add employee</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav">
-            <ng-container *ngIf="appUser">
-                <img class="user-avatar" src={{appUser?.photoURL}}>
-            </ng-container>
-            <li class="nav-item active">
-                <a class="nav-link" *ngIf="!appUser" [routerLink]='' (click)=login()>Login</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" *ngIf="appUser" [routerLink]='' (click)=logout()>Logout</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="https://github.com/AnkitSharma-007/angular-firebase-crud"
-                    target="_blank">GitHub</a>
-            </li>
-        </ul>
-    </div>
+<nav class="navbar navbar-expand-lg bg-info shadow-sm">
+  <a class="navbar-brand" [routerLink]='["/"]'>Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active" *ngIf="appUser">
+        <a class="nav-link" [routerLink]='["/add-employee"]'>Add employee</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <ng-container *ngIf="appUser">
+        <img class="user-avatar" src={{appUser?.photoURL}}>
+      </ng-container>
+      <li class="nav-item active">
+        <a class="nav-link" *ngIf="!appUser" [routerLink]='' (click)=login()>Login</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" *ngIf="appUser" [routerLink]='' (click)=logout()>Logout</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="https://github.com/AnkitSharma-007/angular-firebase-crud" target="_blank">GitHub</a>
+      </li>
+    </ul>
+  </div>
 </nav>

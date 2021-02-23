@@ -1,11 +1,11 @@
 <h1>Employee Data</h1>
 
-<p>This component demonstrates fetching Employee data from cloud firestore.</p>
+<p>This component demonstrates fetching Employee data from Google cloud firestore.</p>
 
 <p *ngIf="!employeeList"><em>Loading...</em></p>
 
-<table class='table table-striped' *ngIf="employeeList">
-    <thead>
+<table class='table table-striped text-center table-bordered' *ngIf="employeeList">
+    <thead class="bg-success">
         <tr>
             <th>Name</th>
             <th>Gender</th>

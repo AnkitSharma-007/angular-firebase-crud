@@ -18,7 +18,7 @@ export class EmployeeService {
         return actions.map(
           c => ({
             cityId: c.payload.doc.id,
-            ...c.payload.doc.data()
+            ...c.payload.doc.data() as {}
           }));
       }));
     return cityList;
@@ -37,7 +37,7 @@ export class EmployeeService {
         return actions.map(
           c => ({
             employeeId: c.payload.doc.id,
-            ...c.payload.doc.data()
+            ...c.payload.doc.data() as {}
           }));
       }));
     return employeeList;
