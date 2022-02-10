@@ -4,15 +4,16 @@
 
 export const environment = {
   production: false,
-  firebaseConfig: {
-    apiKey: 'Dummy key.Replace with your API Key',
-    authDomain: 'ngcrud-8a2fc.firebaseapp.com',
-    databaseURL: 'https://ngcrud-8a2fc.firebaseio.com',
-    projectId: 'ngcrud-8a2fc',
-    storageBucket: '',
-    messagingSenderId: 'Dummy ID. Put in your id',
-    appId: 'DummyID. Put in your app id'
-  }
+ // Your web app's Firebase configuration
+ firebaseConfig : {
+  apiKey: "AIzaSyBiwTUIT8Dxs3Cgf1YNlZynLH6t8G9XvP0",
+  authDomain: "ngkenya-67de0.firebaseapp.com",
+  projectId: "ngkenya-67de0",
+  storageBucket: "ngkenya-67de0.appspot.com",
+  messagingSenderId: "355857517302",
+  appId: "1:355857517302:web:d8e417316f01a7ed7d3ad7"
+}
+
 };
 
 /*
