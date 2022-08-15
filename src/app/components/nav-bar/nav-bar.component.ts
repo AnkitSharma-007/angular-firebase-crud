@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { AuthService } from "src/app/services/auth.service";
-import firebase from "firebase/compat/app";
 
 @Component({
   selector: "app-nav-bar",
@@ -8,17 +7,15 @@ import firebase from "firebase/compat/app";
   styleUrls: ["./nav-bar.component.scss"],
 })
 export class NavBarComponent {
-  appUser: firebase.User;
+  appUser$ = this.authService.appUser$;
 
-  constructor(private authService: AuthService) {
-    this.authService.appUser$.subscribe((appUser) => (this.appUser = appUser));
-  }
+  constructor(private readonly authService: AuthService) {}
 
-  login() {
+  userLogin() {
     this.authService.login();
   }
 
-  logout() {
+  userLogout() {
     this.authService.logout();
   }
 }

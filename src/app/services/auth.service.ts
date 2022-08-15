@@ -11,10 +11,10 @@ export class AuthService {
   appUser$;
 
   constructor(
-    public afAuth: AngularFireAuth,
-    private route: ActivatedRoute,
-    private router: Router,
-    private afs: AngularFirestore
+    private readonly afAuth: AngularFireAuth,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly afs: AngularFirestore
   ) {
     this.appUser$ = this.afAuth.authState;
   }

@@ -1,50 +1,52 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { City } from "src/models/city";
 import { Employee } from "src/models/employee";
 import { EmployeeService } from "src/app/services/employee.service";
-import { Router, ActivatedRoute, ParamMap } from "@angular/router";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/internal/operators/takeUntil";
+import { ActivatedRoute, Params, Router } from "@angular/router";
+import { EMPTY, ReplaySubject } from "rxjs";
+import { switchMap } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "app-employeeform",
   templateUrl: "./employeeform.component.html",
   styleUrls: ["./employeeform.component.scss"],
 })
-export class EmployeeformComponent implements OnInit {
+export class EmployeeformComponent implements OnInit, OnDestroy {
   title = "Create";
   employeeId: string;
   employee = new Employee();
-  cityList: City[];
   private destroyed$ = new ReplaySubject<void>(1);
+  cityList$: Observable<City[]>;
 
   constructor(
-    private route: ActivatedRoute,
-    private employeeService: EmployeeService,
-    private router: Router
+    private readonly avRoute: ActivatedRoute,
+    private readonly employeeService: EmployeeService,
+    private readonly router: Router
   ) {
-    this.route.paramMap
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((params: ParamMap) => {
-        this.employeeId = params.get("id");
-      });
+    this.cityList$ = this.employeeService.getCityList();
   }
 
   ngOnInit() {
-    this.employeeService.getCityList().subscribe((data: City[]) => {
-      this.cityList = data;
-    });
-
-    if (this.employeeId) {
-      this.title = "Edit";
-      this.employeeService
-        .getEmployeeById(this.employeeId)
-        .subscribe((result: Employee) => {
-          if (result) {
-            this.employee = result;
+    this.avRoute.paramMap
+      .pipe(
+        switchMap((params: Params) => {
+          this.employeeId = params.get("id");
+          if (this.employeeId) {
+            this.title = "Edit";
+            return this.employeeService.getEmployeeById(this.employeeId);
+          } else {
+            return EMPTY;
           }
-        });
-    }
+        })
+      )
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((response: Employee) => {
+        if (response) {
+          this.employee = response;
+        }
+      });
   }
 
   onEmployeeFormSubmit() {
@@ -52,16 +54,21 @@ export class EmployeeformComponent implements OnInit {
       this.employeeService
         .updateEmployee(this.employeeId, this.employee)
         .then(() => {
-          this.router.navigate(["/"]);
+          this.navigateToHome();
         });
     } else {
       this.employeeService.saveEmployee(this.employee).then(() => {
-        this.router.navigate(["/"]);
+        this.navigateToHome();
       });
     }
   }
 
-  cancel() {
+  navigateToHome() {
     this.router.navigate(["/"]);
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

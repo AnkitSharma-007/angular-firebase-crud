@@ -1,20 +1,17 @@
-<h1>Employee Form</h1>
+<h1 class="display-5">{{ title }} employee</h1>
 <hr />
 
 <div class="row">
   <div class="col-md-6 mx-auto">
     <div class="card">
-      <div class="card-header">
-        <h2>{{ title }} employee</h2>
-      </div>
       <div class="card-body">
         <form
           #employeeForm="ngForm"
           (ngSubmit)="employeeForm.form.valid && onEmployeeFormSubmit()"
           novalidate
         >
-          <div class="form-group">
-            <label for="name">Name</label>
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
             <input
               type="text"
               class="form-control"
@@ -30,8 +27,8 @@
               Name is required
             </span>
           </div>
-          <div class="form-group">
-            <label for="gender">Gender</label>
+          <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
             <select
               placeholder="Select Gender"
               class="form-control"
@@ -51,8 +48,8 @@
               Gender is required
             </span>
           </div>
-          <div class="form-group">
-            <label for="department">Department</label>
+          <div class="mb-3">
+            <label for="department" class="form-label">Department</label>
             <input
               type="text"
               class="form-control"
@@ -68,8 +65,8 @@
               Department is required
             </span>
           </div>
-          <div class="form-group">
-            <label for="city">City</label>
+          <div class="mb-3">
+            <label for="city" class="form-label">City</label>
             <select
               class="form-control"
               [(ngModel)]="employee.city"
@@ -78,7 +75,10 @@
               required
             >
               <option value="">-- Select City --</option>
-              <option *ngFor="let city of cityList" value="{{ city.cityName }}">
+              <option
+                *ngFor="let city of cityList$ | async"
+                value="{{ city.cityName }}"
+              >
                 {{ city.cityName }}
               </option>
             </select>
@@ -89,9 +89,13 @@
               City is required
             </span>
           </div>
-          <div class="form-group text-right">
-            <button type="submit" class="btn btn-primary mr-2">Save</button>
-            <button type="button" class="btn btn-danger" (click)="cancel()">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary me-2">Save</button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="navigateToHome()"
+            >
               Cancel
             </button>
           </div>

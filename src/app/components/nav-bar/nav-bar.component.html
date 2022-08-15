@@ -1,40 +1,66 @@
-<nav class="navbar navbar-expand-lg bg-info shadow-sm">
-  <a class="navbar-brand" [routerLink]="['/']">Home</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNavDropdown"
-    aria-controls="navbarNavDropdown"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active" *ngIf="appUser">
-        <a class="nav-link" [routerLink]="['/add-employee']">Add employee</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav">
-      <ng-container *ngIf="appUser">
-        <img class="user-avatar" src="{{ appUser?.photoURL }}" />
-      </ng-container>
-      <li class="nav-item active">
-        <a class="nav-link" *ngIf="!appUser" (click)="login()">Login</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" *ngIf="appUser" (click)="logout()">Logout</a>
-      </li>
-      <li class="nav-item active">
+<nav class="navbar navbar-expand-lg navbar navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/']">Home</a>
+    <span class="spacer"></span>
+    <ng-container *ngIf="appUser$ | async as appUser; else login">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" [routerLink]="['/add-employee']"
+            >Add employee</a
+          >
+        </li>
+
+        <img class="user-avatar" src="{{ appUser.photoURL }}" />
+        <li class="nav-item">
+          <a class="nav-link active" (click)="userLogout()">Logout</a>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #login>
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" (click)="userLogin()">Login</a>
+        </li>
+      </ul>
+    </ng-template>
+    <ul class="navbar-nav mb-2 mb-lg-0">
+      <li class="nav-item">
         <a
-          class="nav-link"
+          class="nav-link active"
           href="https://github.com/AnkitSharma-007/angular-firebase-crud"
           target="_blank"
           >GitHub</a
         >
       </li>
     </ul>
+
+    <!-- <ul class="navbar-nav mb-2 mb-lg-0">
+        <ng-container *ngIf="appUser$ | async as appUser; else login">
+          <li class="nav-item">
+            <a class="nav-link active" [routerLink]="['/add-employee']"
+              >Add employee</a
+            >
+          </li>
+          <img class="user-avatar" src="{{ appUser?.photoURL }}" />
+
+          <li class="nav-item active">
+            <a class="nav-link" (click)="userLogout()">Logout</a>
+          </li>
+        </ng-container>
+
+        <ng-template #login>
+          <li class="nav-item">
+            <a class="nav-link active" (click)="userLogin()">Login</a>
+          </li>
+        </ng-template>
+        <li class="nav-item active">
+          <a
+            class="nav-link"
+            href="https://github.com/AnkitSharma-007/angular-firebase-crud"
+            target="_blank"
+            >GitHub</a
+          >
+        </li>
+      </ul> -->
   </div>
 </nav>

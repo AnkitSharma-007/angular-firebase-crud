@@ -1,35 +1,47 @@
-<h1>Employee Data</h1>
+<h1 class="display-4">Employee Data</h1>
 
 <p>
   This component demonstrates fetching Employee data from Google cloud
   firestore.
 </p>
 
-<p *ngIf="!employeeList"><em>Loading...</em></p>
+<ng-template #loading>
+  <p><em>Loading...</em></p>
+</ng-template>
 
-<table
-  class="table table-striped text-center table-bordered"
-  *ngIf="employeeList"
->
-  <thead class="thead-dark">
-    <tr>
-      <th>Name</th>
-      <th>Gender</th>
-      <th>Department</th>
-      <th>City</th>
-      <th *ngIf="appUser">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let emp of employeeList">
-      <td>{{ emp.name }}</td>
-      <td>{{ emp.gender }}</td>
-      <td>{{ emp.department }}</td>
-      <td>{{ emp.city }}</td>
-      <td *ngIf="appUser">
-        <a [routerLink]="['/employee/edit/', emp.employeeId]">Edit</a> |
-        <a [routerLink]="[]" (click)="delete(emp.employeeId)">Delete</a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<ng-container *ngIf="employeeData$ | async as employeeData; else loading">
+  <table class="table shadow table-striped align-middle table-bordered">
+    <thead class="table-success">
+      <tr class="text-center">
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Department</th>
+        <th>City</th>
+        <th *ngIf="employeeData.appUser">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr *ngFor="let employee of employeeData.employeeList">
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.gender }}</td>
+        <td>{{ employee.department }}</td>
+        <td>{{ employee.city }}</td>
+        <td *ngIf="employeeData.appUser">
+          <button
+            class="btn btn-outline-dark"
+            [routerLink]="['/employee/edit/', employee.employeeId]"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-danger ms-2"
+            [routerLink]="[]"
+            (click)="delete(employee.employeeId)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
