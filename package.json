@@ -21,10 +21,9 @@
     "@angular/platform-browser-dynamic": "^14.1.2",
     "@angular/router": "^14.1.2",
     "bootstrap": "^5.2.0",
-    "firebase": "^9.5.0",
+    "firebase": "^9.9.3",
     "popper.js": "^1.15.0",
-    "rxfire": "^6.0.3",
-    "rxjs": "~6.6.3",
+    "rxjs": "~7.5.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
   },

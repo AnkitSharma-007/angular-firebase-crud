@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { City } from "src/models/city";
 import { Employee } from "src/models/employee";
 import { EmployeeService } from "src/app/services/employee.service";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { EMPTY, ReplaySubject } from "rxjs";
 import { switchMap } from "rxjs/operators";
-import { Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -15,24 +13,22 @@ import { takeUntil } from "rxjs/operators";
 })
 export class EmployeeformComponent implements OnInit, OnDestroy {
   title = "Create";
-  employeeId: string;
+  employeeId!: string;
   employee = new Employee();
   private destroyed$ = new ReplaySubject<void>(1);
-  cityList$: Observable<City[]>;
+  cityList$ = this.employeeService.getCityList();
 
   constructor(
     private readonly avRoute: ActivatedRoute,
     private readonly employeeService: EmployeeService,
     private readonly router: Router
-  ) {
-    this.cityList$ = this.employeeService.getCityList();
-  }
+  ) {}
 
   ngOnInit() {
-    this.avRoute.paramMap
+    this.avRoute.params
       .pipe(
         switchMap((params: Params) => {
-          this.employeeId = params.get("id");
+          this.employeeId = params["id"];
           if (this.employeeId) {
             this.title = "Edit";
             return this.employeeService.getEmployeeById(this.employeeId);

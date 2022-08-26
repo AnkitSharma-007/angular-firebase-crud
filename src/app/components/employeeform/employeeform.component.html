@@ -22,7 +22,7 @@
             />
             <span
               class="text-danger"
-              *ngIf="employeeForm.submitted && name.errors?.required"
+              *ngIf="employeeForm.submitted && name.errors?.['required']"
             >
               Name is required
             </span>
@@ -43,7 +43,7 @@
             </select>
             <span
               class="text-danger"
-              *ngIf="employeeForm.submitted && gender.errors?.required"
+              *ngIf="employeeForm.submitted && gender.errors?.['required']"
             >
               Gender is required
             </span>
@@ -60,7 +60,7 @@
             />
             <span
               class="text-danger"
-              *ngIf="employeeForm.submitted && department.errors?.required"
+              *ngIf="employeeForm.submitted && department.errors?.['required']"
             >
               Department is required
             </span>
@@ -84,7 +84,7 @@
             </select>
             <span
               class="text-danger"
-              *ngIf="employeeForm.submitted && city.errors?.required"
+              *ngIf="employeeForm.submitted && city.errors?.['required']"
             >
               City is required
             </span>
