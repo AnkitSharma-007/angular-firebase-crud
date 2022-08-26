@@ -8,16 +8,14 @@ import { AngularFirestore } from "@angular/fire/compat/firestore";
   providedIn: "root",
 })
 export class AuthService {
-  appUser$;
+  appUser$ = this.afAuth.authState;
 
   constructor(
     private readonly afAuth: AngularFireAuth,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly afs: AngularFirestore
-  ) {
-    this.appUser$ = this.afAuth.authState;
-  }
+  ) {}
 
   login() {
     // Store the return URL in localstorage, to be used once the user logs in successfully
