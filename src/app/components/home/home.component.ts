@@ -10,10 +10,11 @@ import { map } from "rxjs/operators";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent {
-  employeeData$ = combineLatest([
-    this.employeeService.getAllEmployees(),
-    this.authService.appUser$,
-  ]).pipe(
+  // Added the following two variables for better readability
+  private readonly employee$ = this.employeeService.getAllEmployees();
+  private readonly appUser$ = this.authService.appUser$;
+
+  employeeData$ = combineLatest([this.employee$, this.appUser$]).pipe(
     map(([employees, appUser]) => ({
       employeeList: employees,
       appUser,

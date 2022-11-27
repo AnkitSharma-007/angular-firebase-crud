@@ -10,38 +10,44 @@
 </ng-template>
 
 <ng-container *ngIf="employeeData$ | async as employeeData; else loading">
-  <table class="table shadow table-striped align-middle table-bordered">
-    <thead class="table-success">
-      <tr class="text-center">
-        <th>Name</th>
-        <th>Gender</th>
-        <th>Department</th>
-        <th>City</th>
-        <th *ngIf="employeeData.appUser">Actions</th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr *ngFor="let employee of employeeData.employeeList">
-        <td>{{ employee.name }}</td>
-        <td>{{ employee.gender }}</td>
-        <td>{{ employee.department }}</td>
-        <td>{{ employee.city }}</td>
-        <td *ngIf="employeeData.appUser">
-          <button
-            class="btn btn-outline-dark"
-            [routerLink]="['/employee/edit/', employee.employeeId]"
-          >
-            Edit
-          </button>
-          <button
-            class="btn btn-danger ms-2"
-            [routerLink]="[]"
-            (click)="delete(employee.employeeId)"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <ng-container *ngIf="employeeData.employeeList.length > 0; else noData">
+    <table class="table shadow table-striped align-middle table-bordered">
+      <thead class="table-success">
+        <tr class="text-center">
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Department</th>
+          <th>City</th>
+          <th *ngIf="employeeData.appUser">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <tr *ngFor="let employee of employeeData.employeeList">
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.gender }}</td>
+          <td>{{ employee.department }}</td>
+          <td>{{ employee.city }}</td>
+          <td *ngIf="employeeData.appUser">
+            <button
+              class="btn btn-outline-dark"
+              [routerLink]="['/employee/edit/', employee.employeeId]"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-danger ms-2"
+              (click)="delete(employee.employeeId)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #noData>
+    <div class="d-flex justify-content-center">
+      <h4>No records found</h4>
+    </div>
+  </ng-template>
 </ng-container>
