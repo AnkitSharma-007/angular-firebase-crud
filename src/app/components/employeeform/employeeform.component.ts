@@ -16,7 +16,8 @@ export class EmployeeformComponent implements OnInit, OnDestroy {
   employeeId!: string;
   employee = new Employee();
   private destroyed$ = new ReplaySubject<void>(1);
-  cityList$ = this.employeeService.getCityList();
+
+  readonly cityList$ = this.employeeService.getCityList();
 
   constructor(
     private readonly avRoute: ActivatedRoute,
@@ -47,12 +48,14 @@ export class EmployeeformComponent implements OnInit, OnDestroy {
 
   onEmployeeFormSubmit() {
     if (this.employeeId) {
+      console.log(this.employee);
       this.employeeService
         .updateEmployee(this.employeeId, this.employee)
         .then(() => {
           this.navigateToHome();
         });
     } else {
+      console.log(this.employee);
       this.employeeService.saveEmployee(this.employee).then(() => {
         this.navigateToHome();
       });

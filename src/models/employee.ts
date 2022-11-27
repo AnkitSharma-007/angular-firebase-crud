@@ -5,11 +5,10 @@ export class Employee {
   department: string;
   gender: string;
 
-  constructor() {
-    this.employeeId = "";
-    this.name = "";
-    this.city = "";
-    this.department = "";
-    this.gender = "";
-  }
+  // constructor() {
+  //   this.name = "";
+  //   this.city = "";
+  //   this.department = "";
+  //   this.gender = "";
+  // }
 }

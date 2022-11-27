@@ -9,14 +9,14 @@ import { map } from "rxjs/operators";
   providedIn: "root",
 })
 export class EmployeeService {
-  constructor(private afs: AngularFirestore) {}
+  constructor(private readonly angularFirestore: AngularFirestore) {}
 
   /**
    * Get the list of all cities from the City collection in firestore DB
    * @returns Observable<City[]>
    */
   getCityList(): Observable<City[]> {
-    const cityList = this.afs
+    const cityList = this.angularFirestore
       .collection<City>("City")
       .snapshotChanges()
       .pipe(
@@ -36,7 +36,7 @@ export class EmployeeService {
    */
   saveEmployee(employee: Employee) {
     const employeeData = JSON.parse(JSON.stringify(employee));
-    return this.afs.collection("Employee").add(employeeData);
+    return this.angularFirestore.collection("Employee").add(employeeData);
   }
 
   /**
@@ -44,7 +44,7 @@ export class EmployeeService {
    * @returns Observable<Employee[]>
    */
   getAllEmployees(): Observable<Employee[]> {
-    const employeeList = this.afs
+    const employeeList = this.angularFirestore
       .collection<Employee>("Employee", (ref) => ref.orderBy("name"))
       .snapshotChanges()
       .pipe(
@@ -64,7 +64,7 @@ export class EmployeeService {
    * @returns Observable<Employee>
    */
   getEmployeeById(employeeId: string): Observable<Employee> {
-    const employeeData = this.afs
+    const employeeData = this.angularFirestore
       .doc<Employee>("Employee/" + employeeId)
       .valueChanges();
     return employeeData;
@@ -78,7 +78,9 @@ export class EmployeeService {
    */
   updateEmployee(employeeId: string, employee: Employee) {
     const employeeData = JSON.parse(JSON.stringify(employee));
-    return this.afs.doc("Employee/" + employeeId).update(employeeData);
+    return this.angularFirestore
+      .doc("Employee/" + employeeId)
+      .update(employeeData);
   }
 
   /**
@@ -87,6 +89,6 @@ export class EmployeeService {
    * @returns Promise<void>
    */
   deleteEmployee(employeeId: string) {
-    return this.afs.doc("Employee/" + employeeId).delete();
+    return this.angularFirestore.doc("Employee/" + employeeId).delete();
   }
 }
