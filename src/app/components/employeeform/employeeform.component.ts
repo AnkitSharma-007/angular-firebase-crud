@@ -48,14 +48,12 @@ export class EmployeeformComponent implements OnInit, OnDestroy {
 
   onEmployeeFormSubmit() {
     if (this.employeeId) {
-      console.log(this.employee);
       this.employeeService
         .updateEmployee(this.employeeId, this.employee)
         .then(() => {
           this.navigateToHome();
         });
     } else {
-      console.log(this.employee);
       this.employeeService.saveEmployee(this.employee).then(() => {
         this.navigateToHome();
       });
