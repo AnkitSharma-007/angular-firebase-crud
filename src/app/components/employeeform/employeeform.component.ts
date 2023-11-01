@@ -20,16 +20,16 @@ export class EmployeeformComponent implements OnInit, OnDestroy {
   readonly cityList$ = this.employeeService.getCityList();
 
   constructor(
-    private readonly avRoute: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly employeeService: EmployeeService,
     private readonly router: Router
   ) {}
 
   ngOnInit() {
-    this.avRoute.params
+    this.activatedRoute.paramMap
       .pipe(
         switchMap((params: Params) => {
-          this.employeeId = params["id"];
+          this.employeeId = params.get("id");
           if (this.employeeId) {
             this.title = "Edit";
             return this.employeeService.getEmployeeById(this.employeeId);
