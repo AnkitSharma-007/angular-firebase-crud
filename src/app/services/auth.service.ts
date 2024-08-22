@@ -1,48 +1,42 @@
-import { Injectable } from "@angular/core";
-import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { ActivatedRoute, Router } from "@angular/router";
-import firebase from "firebase/compat/app";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { inject, Injectable } from '@angular/core';
+import {
+  Auth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  user,
+  User,
+} from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
-  appUser$ = this.afAuth.authState;
+  private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
 
-  constructor(
-    private readonly afAuth: AngularFireAuth,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly afs: AngularFirestore
-  ) {}
+  appUser$: Observable<User | null> = user(this.auth);
 
-  login() {
-    // Store the return URL in localstorage, to be used once the user logs in successfully
-    const returnUrl =
-      this.route.snapshot.queryParamMap.get("returnUrl") || this.router.url;
-
-    localStorage.setItem("returnUrl", returnUrl);
-
-    this.afAuth
-      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then((credential) => this.updateUserData(credential.user));
+  /**
+   * Initiates the login process using Google authentication.
+   *
+   * @returns {void}
+   */
+  login(): void {
+    signInWithPopup(this.auth, new GoogleAuthProvider());
   }
 
-  logout() {
-    this.afAuth.signOut().then(() => {
-      this.router.navigate(["/"]);
+  /**
+   * Logs out the current user by signing them out of the authentication service.
+   * After signing out, navigates the user to the home page.
+   *
+   * @returns {void}
+   */
+  logout(): void {
+    signOut(this.auth).then(() => {
+      this.router.navigate(['/']);
     });
-  }
-
-  // Save the user data to firestore on login
-  private updateUserData(user) {
-    const userRef = this.afs.doc(`appusers/${user.uid}`);
-    const data = {
-      name: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-    };
-    return userRef.set(data, { merge: true });
   }
 }

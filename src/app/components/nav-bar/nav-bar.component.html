@@ -1,37 +1,39 @@
-<nav class="navbar navbar-expand-lg navbar navbar-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" [routerLink]="['/']">Home</a>
-    <span class="spacer"></span>
-    <ng-container *ngIf="appUser$ | async as appUser; else login">
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" [routerLink]="['/add-employee']"
-            >Add employee</a
-          >
-        </li>
+<mat-toolbar>
+  <button mat-button [routerLink]="['/']">
+    <mat-icon aria-hidden="false" fontIcon="home_filled"></mat-icon>
+    Home
+  </button>
+  <span class="spacer"></span>
 
-        <img class="user-avatar" src="{{ appUser.photoURL }}" />
-        <li class="nav-item">
-          <a class="nav-link active" (click)="userLogout()">Logout</a>
-        </li>
-      </ul>
-    </ng-container>
-    <ng-template #login>
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" (click)="userLogin()">Login</a>
-        </li>
-      </ul>
-    </ng-template>
-    <ul class="navbar-nav mb-2 mb-lg-0">
-      <li class="nav-item">
-        <a
-          class="nav-link active"
-          href="https://github.com/AnkitSharma-007/angular-firebase-crud"
-          target="_blank"
-          >GitHub</a
-        >
-      </li>
-    </ul>
-  </div>
-</nav>
+  @if (appUser$ | async; as appUser ) {
+  <button mat-button [routerLink]="['/employee/new']">
+    <mat-icon fontIcon="person_add"></mat-icon>
+    Add Employee
+  </button>
+
+  <button mat-button [matMenuTriggerFor]="userMenu">
+    <img class="user-avatar" src="{{ appUser.photoURL }}" />
+    {{ appUser.displayName }}
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="userLogout()">
+      <mat-icon aria-hidden="false" fontIcon="logout"></mat-icon>
+      Logout
+    </button>
+  </mat-menu>
+
+  } @else {
+  <button mat-button (click)="userLogin()">
+    <mat-icon aria-hidden="false" fontIcon="login"></mat-icon>Login
+  </button>
+  }
+  <a
+    mat-button
+    href="https://github.com/AnkitSharma-007/angular-firebase-crud"
+    target="_blank"
+  >
+    <mat-icon fontIcon="open_in_new"></mat-icon>
+    GitHub
+  </a>
+</mat-toolbar>

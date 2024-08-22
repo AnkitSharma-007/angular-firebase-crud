@@ -1,94 +1,100 @@
-import { Injectable } from "@angular/core";
-import { Employee } from "src/models/employee";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { City } from "src/models/city";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { inject, Injectable } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  orderBy,
+  getDoc,
+  doc,
+  DocumentData,
+  setDoc,
+  addDoc,
+  query,
+  getDocs,
+  deleteDoc,
+  collectionData,
+} from '@angular/fire/firestore';
+import { Employee } from '../models/employee';
+import { City } from '../models/city';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class EmployeeService {
-  constructor(private readonly angularFirestore: AngularFirestore) {}
+  firestore: Firestore = inject(Firestore);
 
   /**
-   * Get the list of all cities from the City collection in firestore DB
-   * @returns Observable<City[]>
+   * Retrieves a list of cities from the Firestore 'City' collection.
+   *
+   * @returns {Observable<City[]>} An observable that emits an array of city objects.
    */
   getCityList(): Observable<City[]> {
-    const cityList = this.angularFirestore
-      .collection<City>("City")
-      .snapshotChanges()
-      .pipe(
-        map((actions) => {
-          return actions.map((c) => ({
-            cityId: c.payload.doc.id,
-            ...c.payload.doc.data(),
-          }));
-        })
-      );
-    return cityList;
+    const itemCollection = collection(this.firestore, 'City');
+    return collectionData<City[]>(itemCollection);
   }
 
   /**
-   * Add a new employee record into the Employee collection in firestore DB
-   * @param employee
+   * Retrieves all employees from the Firestore 'Employee' collection, ordered by name.
+   *
+   * @returns {Promise<Array<Object>>} A promise that resolves to an array of employee objects.
+   * Each object contains the employeeId and the data from the Firestore document.
    */
-  saveEmployee(employee: Employee) {
-    const employeeData = JSON.parse(JSON.stringify(employee));
-    return this.angularFirestore.collection("Employee").add(employeeData);
+  async getAllEmployees(): Promise<Array<Object>> {
+    const employeeQuery = query(
+      collection(this.firestore, 'Employee'),
+      orderBy('name')
+    );
+    const employeeQuerySnapshot = await getDocs(employeeQuery);
+    return employeeQuerySnapshot.docs.map((doc) => {
+      return { employeeId: doc.id, ...doc.data() };
+    });
   }
 
   /**
-   * Get the list of all employee record from the Employee collection
-   * @returns Observable<Employee[]>
+   * Retrieves an employee's data from the Firestore 'Employee' collection by their ID.
+   *
+   * @param {string} employeeId - The ID of the employee to retrieve.
+   * @returns {Promise<DocumentData | undefined>} A promise that resolves to the employee's data,
+   * or undefined if the employee does not exist.
    */
-  getAllEmployees(): Observable<Employee[]> {
-    const employeeList = this.angularFirestore
-      .collection<Employee>("Employee", (ref) => ref.orderBy("name"))
-      .snapshotChanges()
-      .pipe(
-        map((actions) => {
-          return actions.map((c) => ({
-            employeeId: c.payload.doc.id,
-            ...c.payload.doc.data(),
-          }));
-        })
-      );
-    return employeeList;
+  async getEmployeeById(employeeId: string): Promise<DocumentData | undefined> {
+    const employeeData = await getDoc(
+      doc(this.firestore, 'Employee', employeeId)
+    );
+
+    return employeeData.data();
   }
 
   /**
-   * Get the record of particular employee based on the employeeId
-   * @param employeeId
-   * @returns Observable<Employee>
+   * Saves a new employee to the Firestore 'Employee' collection.
+   *
+   * @param {Employee} employee - The employee object to be saved.
+   * @returns {Promise<void>} A promise that resolves when the employee has been successfully saved.
    */
-  getEmployeeById(employeeId: string): Observable<Employee> {
-    const employeeData = this.angularFirestore
-      .doc<Employee>("Employee/" + employeeId)
-      .valueChanges();
-    return employeeData;
+  async saveEmployee(employee: Employee): Promise<void> {
+    await addDoc(collection(this.firestore, 'Employee'), employee);
   }
 
   /**
-   * Update the record of an employee in the Employee collection in firestore DB
-   * @param employeeId
-   * @param employee
-   * @returns Promise<void>
+   * Updates an existing employee's data in the Firestore 'Employee' collection.
+   *
+   * @param {string} employeeId - The ID of the employee to update.
+   * @param {Employee} employee - The employee object containing the updated data.
+   * @returns {Promise<void>} A promise that resolves when the employee's data has been successfully updated.
    */
-  updateEmployee(employeeId: string, employee: Employee) {
-    const employeeData = JSON.parse(JSON.stringify(employee));
-    return this.angularFirestore
-      .doc("Employee/" + employeeId)
-      .update(employeeData);
+  async updateEmployee(employeeId: string, employee: Employee): Promise<void> {
+    await setDoc(doc(this.firestore, 'Employee', employeeId), employee);
   }
 
   /**
-   * Delete the employee record from the Employee collection in firestore DB
-   * @param employeeId
-   * @returns Promise<void>
+   * Deletes an employee from the Firestore 'Employee' collection by their ID.
+   *
+   * @param {string | undefined} employeeId - The ID of the employee to delete. If undefined, no action is taken.
+   * @returns {Promise<void>} A promise that resolves when the employee has been successfully deleted.
    */
-  deleteEmployee(employeeId: string) {
-    return this.angularFirestore.doc("Employee/" + employeeId).delete();
+  async deleteEmployee(employeeId: string | undefined): Promise<void> {
+    if (employeeId) {
+      await deleteDoc(doc(this.firestore, 'Employee', employeeId));
+    }
   }
 }

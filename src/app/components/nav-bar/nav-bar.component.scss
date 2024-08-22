@@ -1,14 +1,14 @@
-.user-avatar {
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.navbar {
-  background-color: #17a2b8;
+mat-toolbar {
+    background: #d7e3ff;
 }
 
 .spacer {
-  flex-grow: 1;
-}
+    flex-grow: 1;
+  }
+  
+
+.user-avatar {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+  }

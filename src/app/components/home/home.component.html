@@ -1,53 +1,86 @@
-<h1 class="display-4">Employee Data</h1>
-
-<p>
-  This component demonstrates fetching Employee data from Google cloud
-  firestore.
-</p>
-
-<ng-template #loading>
-  <p><em>Loading...</em></p>
-</ng-template>
-
-<ng-container *ngIf="employeeData$ | async as employeeData; else loading">
-  <ng-container *ngIf="employeeData.employeeList.length > 0; else noData">
-    <table class="table shadow table-striped align-middle table-bordered">
-      <thead class="table-success">
-        <tr class="text-center">
-          <th>Name</th>
-          <th>Gender</th>
-          <th>Department</th>
-          <th>City</th>
-          <th *ngIf="employeeData.appUser">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="text-center">
-        <tr *ngFor="let employee of employeeData.employeeList">
-          <td>{{ employee.name }}</td>
-          <td>{{ employee.gender }}</td>
-          <td>{{ employee.department }}</td>
-          <td>{{ employee.city }}</td>
-          <td *ngIf="employeeData.appUser">
-            <button
-              class="btn btn-outline-dark"
-              [routerLink]="['/employee/edit/', employee.employeeId]"
-            >
-              Edit
-            </button>
-            <button
-              class="btn btn-danger ms-2"
-              (click)="delete(employee.employeeId)"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </ng-container>
-  <ng-template #noData>
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    @if (loading ) {
     <div class="d-flex justify-content-center">
-      <h4>No records found</h4>
+      <mat-spinner></mat-spinner>
     </div>
-  </ng-template>
-</ng-container>
+    } @else if (dataSource.data.length === 0) {
+    <mat-card class="d-flex justify-content-center">
+      <mat-card-content>
+        <h3 class="mat-h3">No records found</h3>
+      </mat-card-content>
+    </mat-card>
+    } @else {
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Filter</mat-label>
+          <input
+            matInput
+            (keyup)="applyFilter($event)"
+            placeholder="Search anything"
+          />
+        </mat-form-field>
+        <table class="wd-100" mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="gender">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Gender</th>
+            <td mat-cell *matCellDef="let row">{{ row.gender }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Department
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.department }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="city">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+            <td mat-cell *matCellDef="let row">{{ row.city }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="operation">
+            <th mat-header-cell *matHeaderCellDef>Operation</th>
+            <td mat-cell *matCellDef="let row">
+              @if({appUser:appUser$ | async}; as userData) {
+              <button
+                mat-icon-button
+                color="primary"
+                [routerLink]="['employee/edit/', row.employeeId]"
+                [disabled]="userData.appUser == null"
+              >
+                <mat-icon aria-label="Edit">edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="deleteConfirm(row)"
+                [disabled]="userData.appUser == null"
+              >
+                <mat-icon aria-label="Delete">delete</mat-icon>
+              </button>
+              }
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+      </mat-card-content>
+    </mat-card>
+    }
+  </div>
+</div>

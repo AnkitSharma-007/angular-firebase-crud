@@ -1,0 +1,99 @@
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <h2 class="display-3">{{ formTitle }} Employee</h2>
+    <hr />
+  </div>
+  <div class="col-md-6 mx-auto">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="employeeForm" (ngSubmit)="save()">
+          <div>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Name</mat-label>
+              <input
+                matInput
+                placeholder="Name"
+                formControlName="name"
+                required
+              />
+              @if ( (employeeFormControl.name.touched || submitted) &&
+              employeeFormControl.name.errors?.['required'] ) {
+              <mat-error>Title is required.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Gender</mat-label>
+              <mat-select
+                placeholder="Gender"
+                formControlName="gender"
+                required
+              >
+                <mat-option value=""> -- Select Gender -- </mat-option>
+                <mat-option value="Male"> Male </mat-option>
+                <mat-option value="Female"> Female </mat-option>
+              </mat-select>
+              @if ((employeeFormControl.gender.touched || submitted) &&
+              (employeeFormControl.gender.errors?.['required'])) {
+              <mat-error>Gender is required.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Department</mat-label>
+              <input
+                matInput
+                placeholder="Department"
+                formControlName="department"
+                required
+              />
+              @if ( (employeeFormControl.department.touched || submitted) &&
+              employeeFormControl.department.errors?.['required']) {
+              <mat-error>Department is required.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>City</mat-label>
+            <mat-select placeholder="City" formControlName="city" required>
+              <mat-option value=""> -- Select City -- </mat-option>
+              @for (city of cityList$ | async; track $index ) {
+              <mat-option value="{{ city.cityName }}">
+                {{ city.cityName }}</mat-option
+              >
+              }
+            </mat-select>
+            @if ((employeeFormControl.city.touched || submitted) &&
+            (employeeFormControl.city.errors?.['required'])) {
+            <mat-error>City is required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-card-actions align="end" class="p-0">
+            <button
+              type="submit"
+              mat-raised-button
+              color="primary"
+              class="me-2"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              mat-raised-button
+              color="warn"
+              (click)="navigateToHome()"
+            >
+              Cancel
+            </button>
+          </mat-card-actions>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
